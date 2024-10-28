@@ -3,6 +3,7 @@ node_modules
 
 # built files
 /lib
+/*.tgz
 
 logs
 
