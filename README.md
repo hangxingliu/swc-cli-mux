@@ -9,6 +9,11 @@ maintained by [@kdy1 강동윤](https://github.com/kdy1)
 > - Synchronized at: **2024-10-28**
 > - Commit URL: https://github.com/swc-project/pkgs/tree/a3889a338813ae17388e848aa15d819bad8e681a
 >
+> Main changes between the original repo:
+>
+> <https://github.com/hangxingliu/swc-cli-mux/commit/2c8572a3439a4265d6698e934d07283df4406079>
+>
+
 
 ## Changes from Original Project
 

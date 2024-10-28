@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    name: Test with Node.js v20 on Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js v20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: "https://registry.npmjs.org"
+      - run: corepack enable && corepack install
+      - run: yarn install
+      - run: yarn run build
+      - run: yarn run test
+      - run: yarn run tsc
+      - run: yarn run tgz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pkg
+          path: ./*.tgz
+          if-no-files-found: error
+          compression-level: 0
