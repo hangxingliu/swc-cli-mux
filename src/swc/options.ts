@@ -301,7 +301,7 @@ export default function parserArgs(args: string[]) {
             opts = loadCLIConfigFile(program, opts, opts.cliConfigFile);
         } catch (e: any) {
             verifyArgsErrors([e.message]);
-            return;
+            process.exit(2);
         }
     }
 

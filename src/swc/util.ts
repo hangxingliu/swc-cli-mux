@@ -1,7 +1,7 @@
 import * as swc from "@swc/core";
 import slash from "slash";
 import { mkdirSync, writeFileSync, promises } from "fs";
-import { dirname, join, relative } from "path";
+import { dirname, join, relative, sep } from "path";
 
 export async function exists(path: string): Promise<boolean> {
     let pathExists = true;
@@ -148,6 +148,8 @@ export function getDest(
     stripLeadingPaths: boolean,
     ext?: string
 ) {
+    // remove common prefix from filename
+    filename = removeCommonPrefix(filename, outDir);
     let base = slash(relative(cwd, filename));
     if (stripLeadingPaths) {
         base = stripComponents(base);
@@ -156,4 +158,24 @@ export function getDest(
         base = base.replace(/\.\w*$/, ext);
     }
     return join(outDir, base);
+}
+
+/**
+ * @param filename /path/to/a
+ * @param outDir /path/
+ * @returns to/a
+ */
+export function removeCommonPrefix(filename: string, outDir: string) {
+    const fileNameArr = filename.split(sep);
+    const outDirArr = outDir.split(sep);
+    let prefixLen = 0;
+
+    for (
+        prefixLen = 0;
+        prefixLen < fileNameArr.length &&
+        prefixLen < outDirArr.length &&
+        fileNameArr[prefixLen] === outDirArr[prefixLen];
+        prefixLen++
+    );
+    return fileNameArr.slice(prefixLen).join(sep);
 }
