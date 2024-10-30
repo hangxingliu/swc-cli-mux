@@ -6,8 +6,8 @@ maintained by [@kdy1 강동윤](https://github.com/kdy1)
 >
 > Source code synchronization status:
 >
-> - Synchronized at: **2024-10-28**
-> - Commit URL: https://github.com/swc-project/pkgs/tree/a3889a338813ae17388e848aa15d819bad8e681a
+> - Synchronized at: **2024-10-30**
+> - Commit URL: https://github.com/swc-project/pkgs/tree/184c46b25324013ddd9c3ec1cf1df2f3c401d75a
 >
 > Main changes between the original repo:
 >

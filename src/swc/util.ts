@@ -1,7 +1,8 @@
 import * as swc from "@swc/core";
 import slash from "slash";
 import { mkdirSync, writeFileSync, promises } from "fs";
-import { dirname, join, relative, sep } from "path";
+import { dirname, join, relative } from "path";
+import { stderr } from "process";
 
 export async function exists(path: string): Promise<boolean> {
     let pathExists = true;
@@ -113,10 +114,10 @@ export function assertCompilationResult<T>(
     }
     if (!quiet && compiled + copied > 0) {
         const copyResult = copied === 0 ? " " : ` (copied ${copied}) `;
-        console.info(
+        stderr.write(
             `Successfully compiled ${compiled} ${
                 compiled !== 1 ? "files" : "file"
-            }${copyResult}with swc.`
+            }${copyResult}with swc.\n`
         );
     }
 
@@ -166,8 +167,8 @@ export function getDest(
  * @returns to/a
  */
 export function removeCommonPrefix(filename: string, outDir: string) {
-    const fileNameArr = filename.split(sep);
-    const outDirArr = outDir.split(sep);
+    const fileNameArr = filename.split("/");
+    const outDirArr = outDir.split("/");
     let prefixLen = 0;
 
     for (
@@ -177,5 +178,5 @@ export function removeCommonPrefix(filename: string, outDir: string) {
         fileNameArr[prefixLen] === outDirArr[prefixLen];
         prefixLen++
     );
-    return fileNameArr.slice(prefixLen).join(sep);
+    return fileNameArr.slice(prefixLen).join("/");
 }

@@ -1,6 +1,6 @@
 {
   "name": "swc-cli-mux",
-  "version": "0.4.1-mux.20240914",
+  "version": "0.5.0",
   "description": "CLI for the swc project",
   "main": "lib/swc/index.js",
   "scripts": {

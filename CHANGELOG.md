@@ -1,5 +1,15 @@
 # @swc/cli
 
+## 0.5.0
+
+### Minor Changes
+
+-   a3889a3: Bump @swc/cli
+
+### Patch Changes
+
+-   76e98e3: fix(cli): Redirect messages to stderr
+
 ## 0.4.0
 
 ### Minor Changes
