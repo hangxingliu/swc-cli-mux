@@ -33,7 +33,7 @@ const recursive = { recursive: true };
 async function handleCopy(
     filename: string,
     outDir: string,
-    stripLeadingPaths: boolean
+    stripLeadingPaths: boolean,
 ) {
     const dest = getDest(filename, outDir, stripLeadingPaths);
     const dir = dirname(dest);
@@ -58,7 +58,7 @@ async function beforeStartCompilation(cliOptions: CliOptions) {
 async function initialCompilation(
     cliOptions: CliOptions,
     swcOptions: Options,
-    callbacks?: Callbacks
+    callbacks?: Callbacks,
 ) {
     const {
         includeDotfiles,
@@ -83,12 +83,12 @@ async function initialCompilation(
         filenames,
         only,
         ignore,
-        includeDotfiles
+        includeDotfiles,
     );
     const [compilable, copyable] = splitCompilableAndCopyable(
         sourceFiles,
         extensions,
-        copyFiles
+        copyFiles,
     );
     if (sync) {
         for (const filename of compilable) {
@@ -114,7 +114,7 @@ async function initialCompilation(
                 const result = await handleCopy(
                     filename,
                     outDir,
-                    stripLeadingPaths
+                    stripLeadingPaths,
                 );
                 results.set(filename, result);
             } catch (err: any) {
@@ -148,13 +148,13 @@ async function initialCompilation(
                                 console.error(err.message);
                             }
                             throw err;
-                        })
-                )
+                        }),
+                ),
             ),
             Promise.allSettled(
                 copyable.map(file =>
-                    handleCopy(file, outDir, stripLeadingPaths)
-                )
+                    handleCopy(file, outDir, stripLeadingPaths),
+                ),
             ),
         ]).then(([compiled, copied]) => {
             compiled.forEach((result, index) => {
@@ -228,7 +228,7 @@ async function initialCompilation(
             console.error(
                 `Failed to compile ${failed} ${
                     failed !== 1 ? "files" : "file"
-                } with swc.`
+                } with swc.`,
             );
             if (!watch) {
                 const files = Array.from(results.entries())
@@ -244,7 +244,7 @@ async function initialCompilation(
 async function watchCompilation(
     cliOptions: CliOptions,
     swcOptions: Options,
-    callbacks?: Callbacks
+    callbacks?: Callbacks,
 ) {
     const {
         includeDotfiles,
@@ -264,7 +264,7 @@ async function watchCompilation(
         filenames,
         includeDotfiles,
         only,
-        ignore
+        ignore,
     );
     watcher.on("ready", () => {
         if (callbacks?.onWatchReady) {
@@ -281,14 +281,14 @@ async function watchCompilation(
                         filename,
                         outDir,
                         stripLeadingPaths,
-                        `.${mapTsExt(filename)}`
-                    )
+                        `.${mapTsExt(filename)}`,
+                    ),
                 );
                 const sourcemapPath = getDest(
                     filename,
                     outDir,
                     stripLeadingPaths,
-                    `.${mapTsExt(filename)}.map`
+                    `.${mapTsExt(filename)}.map`,
                 );
                 const sourcemapExists = await exists(sourcemapPath);
                 if (sourcemapExists) {
@@ -303,7 +303,7 @@ async function watchCompilation(
             }
         }
     });
-    for (const type of ["add", "change"]) {
+    for (const type of ["add", "change"] as const) {
         watcher.on(type, async filename => {
             if (isCompilableExtension(filename, extensions)) {
                 const start = process.hrtime();
@@ -333,8 +333,8 @@ async function watchCompilation(
                             stderr.write(
                                 format(
                                     `Successfully compiled ${filename} with swc (%dms)\n`,
-                                    duration.toFixed(2)
-                                )
+                                    duration.toFixed(2),
+                                ),
                             );
                         }
                     }
@@ -358,7 +358,7 @@ async function watchCompilation(
                     const result = await handleCopy(
                         filename,
                         outDir,
-                        stripLeadingPaths
+                        stripLeadingPaths,
                     );
                     if (result === CompileStatus.Copied) {
                         const duration = getDuration();
@@ -372,8 +372,8 @@ async function watchCompilation(
                             stderr.write(
                                 format(
                                     `Successfully copied ${filename} with swc (%dms)\n`,
-                                    duration.toFixed(2)
-                                )
+                                    duration.toFixed(2),
+                                ),
                             );
                         }
                     }
