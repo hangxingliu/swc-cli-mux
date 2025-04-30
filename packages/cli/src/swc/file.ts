@@ -85,7 +85,7 @@ export default async function ({
             if (result.map) {
                 const map = `//#sourceMappingURL=data:application/json;charset=utf-8;base64,${Buffer.from(
                     JSON.stringify(result.map),
-                    "utf8"
+                    "utf8",
                 ).toString("base64")}`;
                 process.stdout.write(map);
             }
@@ -96,7 +96,7 @@ export default async function ({
         const sourceFileName = slash(
             cliOptions.outFile
                 ? path.relative(path.dirname(cliOptions.outFile), filename)
-                : filename
+                : filename,
         );
         return await util.compile(
             filename,
@@ -105,12 +105,12 @@ export default async function ({
                 sourceFileName,
             },
             cliOptions.sync,
-            cliOptions.outFile
+            cliOptions.outFile,
         );
     }
 
     async function getProgram(
-        previousResults: Map<string, swc.Output | Error> = new Map()
+        previousResults: Map<string, swc.Output | Error> = new Map(),
     ) {
         const results: typeof previousResults = new Map();
 
@@ -118,7 +118,7 @@ export default async function ({
             cliOptions.filenames,
             cliOptions.only,
             cliOptions.ignore,
-            cliOptions.includeDotfiles
+            cliOptions.includeDotfiles,
         )) {
             if (isCompilableExtension(filename, cliOptions.extensions)) {
                 results.set(filename, previousResults.get(filename)!);
@@ -146,7 +146,7 @@ export default async function ({
         if (cliOptions.watch) {
             const watcher = await watchSources(
                 cliOptions.filenames,
-                cliOptions.includeDotfiles
+                cliOptions.includeDotfiles,
             );
             watcher.on("ready", () => {
                 Promise.resolve()
@@ -170,7 +170,7 @@ export default async function ({
             watcher.on("unlink", filename => {
                 results.delete(filename);
             });
-            for (const type of ["add", "change"]) {
+            for (const type of ["add", "change"] as const) {
                 watcher.on(type, filename => {
                     if (
                         !isCompilableExtension(filename, cliOptions.extensions)
@@ -195,7 +195,7 @@ export default async function ({
                                 const ms = seconds * 1000 + nanoseconds * 1e-6;
                                 const name = path.basename(cliOptions.outFile);
                                 console.log(
-                                    `Compiled ${name} in ${ms.toFixed(2)}ms`
+                                    `Compiled ${name} in ${ms.toFixed(2)}ms`,
                                 );
                             }
                         })
@@ -224,7 +224,7 @@ export default async function ({
                 sourceFileName: "stdin",
             },
             cliOptions.sync,
-            undefined
+            undefined,
         );
 
         output([res]);
