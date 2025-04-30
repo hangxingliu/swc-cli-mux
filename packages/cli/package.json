@@ -1,6 +1,6 @@
 {
     "name": "swc-cli-mux",
-    "version": "0.7.3",
+    "version": "0.7.4",
     "description": "CLI for the swc project",
     "main": "lib/swc/index.js",
     "scripts": {
@@ -65,7 +65,7 @@
         "@types/jest": "^29.5.14",
         "@types/node": "^22.15.3",
         "@types/semver": "^7.7.0",
-        "chokidar": "^4.0.1",
+        "chokidar": "^4.0.3",
         "deepmerge": "^4.3.1",
         "jest": "^29.7.0",
         "ts-jest": "^29.3.2",
