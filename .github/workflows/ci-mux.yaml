@@ -1,0 +1,30 @@
+name: CI (swc-cli-mux)
+
+on:
+    - push
+    - pull_request
+
+jobs:
+    test:
+        name: Test with Node.js LTS/* on Ubuntu
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - run: corepack enable
+            - name: Use Node.js LTS/*
+              uses: actions/setup-node@v4
+              with:
+                  node-version: lts/*
+                  cache: yarn
+                  registry-url: "https://registry.npmjs.org"
+            - run: yarn install
+            - run: yarn run build
+            - run: yarn run test
+            - run: yarn workspace swc-cli-mux run tsc
+            - run: yarn workspace swc-cli-mux run tgz
+            - uses: actions/upload-artifact@v4
+              with:
+                  name: pkg
+                  path: ./packages/*/*.tgz
+                  if-no-files-found: error
+                  compression-level: 0
