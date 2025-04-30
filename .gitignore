@@ -1,3 +1,11 @@
+# ======
+# A clone of the original repo for the reference purpose
+/reference
+/*.patch
+/.changset
+/.github/actions
+# ======
+
 # Logs
 logs
 *.log

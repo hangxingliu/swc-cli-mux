@@ -1,3 +1,8 @@
+# ======
+# ignore the README file. It will be copied from the root directory before publishing
+/README.md
+# ======
+
 # Lock files
 package-lock.json
 
