@@ -1,1 +1,8 @@
+# ignore packages:
+counter
+jest
+next-swc-minifer-backport
+swc-info
+swc-loader
+
 **/lib/**/*.js
