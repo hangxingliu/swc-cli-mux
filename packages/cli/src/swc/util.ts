@@ -19,7 +19,7 @@ export async function transform(
     code: string,
     opts: swc.Options,
     sync: boolean,
-    outputPath: string | undefined
+    outputPath: string | undefined,
 ): Promise<swc.Output> {
     opts = {
         filename,
@@ -41,7 +41,7 @@ export async function compile(
     filename: string,
     opts: swc.Options,
     sync: boolean,
-    outputPath: string | undefined
+    outputPath: string | undefined,
 ): Promise<swc.Output | void> {
     opts = {
         ...opts,
@@ -78,7 +78,7 @@ export async function compile(
 export function outputFile(
     output: swc.Output,
     filename: string,
-    sourceMaps: undefined | swc.Options["sourceMaps"]
+    sourceMaps: undefined | swc.Options["sourceMaps"],
 ) {
     const destDir = dirname(filename);
     mkdirSync(destDir, { recursive: true });
@@ -98,7 +98,7 @@ export function outputFile(
 
 export function assertCompilationResult<T>(
     result: Map<string, Error | T>,
-    quiet = false
+    quiet = false,
 ): asserts result is Map<string, T> {
     let compiled = 0;
     let copied = 0;
@@ -117,7 +117,7 @@ export function assertCompilationResult<T>(
         stderr.write(
             `Successfully compiled ${compiled} ${
                 compiled !== 1 ? "files" : "file"
-            }${copyResult}with swc.\n`
+            }${copyResult}with swc.\n`,
         );
     }
 
@@ -125,7 +125,7 @@ export function assertCompilationResult<T>(
         throw new Error(
             `Failed to compile ${failed} ${
                 failed !== 1 ? "files" : "file"
-            } with swc.`
+            } with swc.`,
         );
     }
 }
@@ -147,8 +147,10 @@ export function getDest(
     filename: string,
     outDir: string,
     stripLeadingPaths: boolean,
-    ext?: string
+    ext?: string,
 ) {
+    // remove common prefix from filename
+    filename = removeCommonPrefix(filename, outDir);
     let base = slash(relative(cwd, filename));
     if (stripLeadingPaths) {
         base = stripComponents(base);
@@ -157,4 +159,24 @@ export function getDest(
         base = base.replace(/\.\w*$/, ext);
     }
     return join(outDir, base);
+}
+
+/**
+ * @param filename /path/to/a
+ * @param outDir /path/
+ * @returns to/a
+ */
+export function removeCommonPrefix(filename: string, outDir: string) {
+    const fileNameArr = filename.split("/");
+    const outDirArr = outDir.split("/");
+    let prefixLen = 0;
+
+    for (
+        prefixLen = 0;
+        prefixLen < fileNameArr.length &&
+        prefixLen < outDirArr.length &&
+        fileNameArr[prefixLen] === outDirArr[prefixLen];
+        prefixLen++
+    );
+    return fileNameArr.slice(prefixLen).join("/");
 }

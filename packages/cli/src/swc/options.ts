@@ -31,7 +31,7 @@ export const initProgram = () => {
 
     program.option(
         "-f, --filename [filename]",
-        "filename to use when reading from stdin - this will be used in source-maps, errors etc"
+        "filename to use when reading from stdin - this will be used in source-maps, errors etc",
     );
 
     program.option("--config-file [path]", "Path to a .swcrc file to use");
@@ -39,32 +39,32 @@ export const initProgram = () => {
     program.option(
         "--cli-config-file [path]",
         "Path to a JSON file containing CLI options. " +
-            "Options provided directly via command line override the ones in the configuration file."
+            "Options provided directly via command line override the ones in the configuration file.",
     );
 
     program.option(
         "--env-name [name]",
         "The name of the 'env' to use when loading configs and plugins. " +
-            "Defaults to the value of SWC_ENV, or else NODE_ENV, or else 'development'."
+            "Defaults to the value of SWC_ENV, or else NODE_ENV, or else 'development'.",
     );
 
     program.option("--no-swcrc", "Whether or not to look up .swcrc files");
 
     program.option(
         "--delete-dir-on-start",
-        "Whether or not delete output directory on start"
+        "Whether or not delete output directory on start",
     );
 
     program.option(
         "--ignore [list]",
         "list of glob paths to **not** compile",
-        collect
+        collect,
     );
 
     program.option(
         "--only [list]",
         "list of glob paths to **only** compile",
-        collect
+        collect,
     );
 
     program.option("-w, --watch", "Recompile files on changes");
@@ -74,77 +74,77 @@ export const initProgram = () => {
     program.option(
         "-s, --source-maps [true|false|inline|both]",
         "generate source maps",
-        unstringify
+        unstringify,
     );
 
     program.option(
         "--source-map-target [string]",
-        "set `file` on returned source map"
+        "set `file` on returned source map",
     );
 
     program.option(
         "--source-file-name [string]",
-        "set `sources[0]` on returned source map"
+        "set `sources[0]` on returned source map",
     );
 
     program.option(
         "--source-root [filename]",
-        "the root from which all sources are relative"
+        "the root from which all sources are relative",
     );
 
     program.option(
         "-o, --out-file [out]",
-        "Compile all input files into a single file"
+        "Compile all input files into a single file",
     );
 
     program.option(
         "-d, --out-dir [out]",
-        "Compile an input directory of modules into an output directory"
+        "Compile an input directory of modules into an output directory",
     );
 
     program.option(
         "--out-file-extension [string]",
         "Use a specific extension for the output files [default: js]",
-        DEFAULT_OUT_FILE_EXTENSION
+        DEFAULT_OUT_FILE_EXTENSION,
     );
 
     program.option(
         "-D, --copy-files",
-        "When compiling a directory copy over non-compilable files"
+        "When compiling a directory copy over non-compilable files",
     );
 
     program.option(
         "--strip-leading-paths",
         "Remove the leading directory (including all parent relative paths) when building the final output path",
-        false
+        false,
     );
 
     program.option(
         "--include-dotfiles",
-        "Include dotfiles when compiling and copying non-compilable files"
+        "Include dotfiles when compiling and copying non-compilable files",
     );
 
     program.option(
         "-C, --config <config>",
         "Override a config from .swcrc file. e.g. -C module.type=amd -C module.moduleId=hello",
-        collect
+        collect,
     );
 
     program.option(
         "--sync",
         "Invoke swc synchronously. Useful for debugging.",
-        collect
+        collect,
     );
 
     program.option(
         "--workers [number]",
-        "The number of workers to use for parallel processing"
+        "The number of workers to use for parallel processing",
     );
 
     program.option(
         "--log-watch-compilation",
         "Log a message when a watched file is successfully compiled",
-        true
+        true,
     );
 
     program.option("--extensions [list]", "Use specific extensions", collect);
@@ -164,7 +164,7 @@ This'll be a default command for @swc/cli@1.
 Please give it a try and report any issues at https://github.com/swc-project/swc/issues/4017
 ============================================================================================
 
-`
+`,
     );
 };
 
@@ -179,7 +179,7 @@ function unstringify(val: string): any {
 function loadCLIConfigFile(
     program: Command,
     opts: OptionValues,
-    path: string
+    path: string,
 ): OptionValues {
     let configOpts: OptionValues;
     let contents: string;
@@ -195,7 +195,7 @@ function loadCLIConfigFile(
         configOpts = JSON.parse(contents);
     } catch (e) {
         throw new Error(
-            `CLI config file "${path}" is not a well-formed JSON file.`
+            `CLI config file "${path}" is not a well-formed JSON file.`,
         );
     }
 
@@ -203,10 +203,10 @@ function loadCLIConfigFile(
     configOpts = Object.fromEntries(
         Object.entries(configOpts).map(([key, value]) => {
             const camelCaseKey = key.replace(/(-[-a-z])/g, (_, m) =>
-                m.substring(1).toUpperCase()
+                m.substring(1).toUpperCase(),
             );
             return [camelCaseKey, value];
-        })
+        }),
     );
 
     // Split existing options in default and provided one
@@ -241,7 +241,7 @@ function verifyArgsErrors(errors: string[]): void {
 
 function collect(
     value: string,
-    previousValue?: string[]
+    previousValue?: string[],
 ): string[] | undefined {
     // If the user passed the option with no value, like "babel file.js --presets", do nothing.
     /* istanbul ignore next */
@@ -301,7 +301,7 @@ export default function parserArgs(args: string[]) {
             opts = loadCLIConfigFile(program, opts, opts.cliConfigFile);
         } catch (e: any) {
             verifyArgsErrors([e.message]);
-            return;
+            process.exit(2);
         }
     }
 
@@ -333,7 +333,7 @@ export default function parserArgs(args: string[]) {
         opts.swcrc !== false
     ) {
         errors.push(
-            "stdin compilation requires either -f/--filename [filename] or --no-swcrc"
+            "stdin compilation requires either -f/--filename [filename] or --no-swcrc",
         );
     }
 
@@ -344,7 +344,7 @@ export default function parserArgs(args: string[]) {
             errors.push(
                 "--workers must be a positive integer (found " +
                     opts.workers +
-                    ")"
+                    ")",
             );
         }
     }
